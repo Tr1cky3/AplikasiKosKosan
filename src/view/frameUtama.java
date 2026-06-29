@@ -30,6 +30,7 @@ public class frameUtama extends javax.swing.JFrame {
     private void initComponents() {
 
         container = new javax.swing.JDesktopPane();
+        jLabel1 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         menuAplikasi = new javax.swing.JMenu();
         submenuCloseApp = new javax.swing.JMenuItem();
@@ -43,15 +44,27 @@ public class frameUtama extends javax.swing.JFrame {
 
         container.setBackground(new java.awt.Color(95, 95, 95));
 
+        jLabel1.setFont(new java.awt.Font("MS UI Gothic", 0, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("Selamat Datang, Gunakan menu Data untuk memulai");
+
+        container.setLayer(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
         javax.swing.GroupLayout containerLayout = new javax.swing.GroupLayout(container);
         container.setLayout(containerLayout);
         containerLayout.setHorizontalGroup(
             containerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 800, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, containerLayout.createSequentialGroup()
+                .addContainerGap(158, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(126, 126, 126))
         );
         containerLayout.setVerticalGroup(
             containerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 577, Short.MAX_VALUE)
+            .addGroup(containerLayout.createSequentialGroup()
+                .addGap(260, 260, 260)
+                .addComponent(jLabel1)
+                .addContainerGap(292, Short.MAX_VALUE))
         );
 
         menuAplikasi.setText("Aplikasi");
@@ -200,6 +213,7 @@ public class frameUtama extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane container;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu menuAplikasi;
     private javax.swing.JMenu menuData;

@@ -42,13 +42,13 @@ public class tambahTenant extends javax.swing.JInternalFrame {
         lblNama = new javax.swing.JLabel();
         lblTanggal = new javax.swing.JLabel();
         lblKamar = new javax.swing.JLabel();
-        lblHarga = new javax.swing.JLabel();
         txtNama = new javax.swing.JTextField();
         txtTanggal = new javax.swing.JFormattedTextField();
         cmbKamar = new javax.swing.JComboBox<>();
-        sliderHarga = new javax.swing.JSlider();
+        btnSimpan = new javax.swing.JButton();
+        btnReset = new javax.swing.JButton();
 
-        setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Tambah Tenant Baru"));
+        setBorder(javax.swing.BorderFactory.createTitledBorder("Tambah Tenant Baru"));
 
         lblNama.setText("Nama Tenant ");
 
@@ -56,18 +56,25 @@ public class tambahTenant extends javax.swing.JInternalFrame {
 
         lblKamar.setText("Nomor Kamar ");
 
-        lblHarga.setText("Harga Kamar/Bulan");
-
-        txtNama.setText("Masukkan Nama Tenant");
         txtNama.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtNamaActionPerformed(evt);
             }
         });
 
-        txtTanggal.setText("jFormattedTextField1");
+        txtTanggal.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("d-M-y"))));
+        txtTanggal.setToolTipText("DD-MM-YYYY");
 
-        cmbKamar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbKamar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "==: Pilih Kamar :==", "Kamar 001", "Kamar 002", "Kamar 003", "Kamar 004", "Kamar 005", "Kamar 006", "Kamar 007", "Kamar 008", "Kamar 009", "Kamar 010", "Kamar 011" }));
+
+        btnSimpan.setText("Simpan");
+
+        btnReset.setText("Reset");
+        btnReset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnResetActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -79,13 +86,13 @@ public class tambahTenant extends javax.swing.JInternalFrame {
                     .addComponent(lblNama)
                     .addComponent(lblTanggal)
                     .addComponent(lblKamar)
-                    .addComponent(lblHarga))
-                .addGap(60, 60, 60)
+                    .addComponent(btnSimpan))
+                .addGap(84, 84, 84)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(txtNama)
                     .addComponent(txtTanggal)
-                    .addComponent(cmbKamar, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(sliderHarga, javax.swing.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE))
+                    .addComponent(cmbKamar, 0, 226, Short.MAX_VALUE)
+                    .addComponent(btnReset, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap(355, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -103,11 +110,11 @@ public class tambahTenant extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblKamar)
                     .addComponent(cmbKamar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(56, 56, 56)
+                .addGap(116, 116, 116)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblHarga)
-                    .addComponent(sliderHarga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(212, Short.MAX_VALUE))
+                    .addComponent(btnSimpan)
+                    .addComponent(btnReset))
+                .addContainerGap(149, Short.MAX_VALUE))
         );
 
         pack();
@@ -117,14 +124,18 @@ public class tambahTenant extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNamaActionPerformed
 
+    private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnResetActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnReset;
+    private javax.swing.JButton btnSimpan;
     private javax.swing.JComboBox<String> cmbKamar;
-    private javax.swing.JLabel lblHarga;
     private javax.swing.JLabel lblKamar;
     private javax.swing.JLabel lblNama;
     private javax.swing.JLabel lblTanggal;
-    private javax.swing.JSlider sliderHarga;
     private javax.swing.JTextField txtNama;
     private javax.swing.JFormattedTextField txtTanggal;
     // End of variables declaration//GEN-END:variables
