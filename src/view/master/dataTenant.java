@@ -20,6 +20,7 @@ public class dataTenant extends javax.swing.JInternalFrame {
      */
     public dataTenant() {
         initComponents();
+        tampilkanData();
         // Mengambil UI dari JInternalFrame
         javax.swing.plaf.basic.BasicInternalFrameUI ui = (javax.swing.plaf.basic.BasicInternalFrameUI) this.getUI();
         javax.swing.JComponent northPane = ui.getNorthPane();
@@ -33,7 +34,51 @@ public class dataTenant extends javax.swing.JInternalFrame {
             northPane.removeMouseMotionListener(listener);
             }
         }
-
+    }
+    
+    public void tampilkanData(){
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("ID");
+        model.addColumn("Nama");
+        model.addColumn("Email");
+        model.addColumn("No. Handphone");
+        model.addColumn("No. Kamar");
+        model.addColumn("Tanggal Masuk");
+        model.addColumn("Tenggat Bayar");
+        model.addColumn("Harga/Bulan");
+        
+        try{
+            Connection conn = aplikasikos.Connector.getKoneksi(); 
+            Statement stmt = conn.createStatement();
+            
+            String query = "SELECT * FROM tblTenant ORDER BY id_tenant DESC";
+            ResultSet rs = stmt.executeQuery(query);
+            
+            while (rs.next()) {
+                model.addRow(new Object[]{
+                    rs.getInt("id_tenant"),
+                    rs.getString("nama_tenant"),
+                    rs.getString("email"),
+                    rs.getString("nomor_hp"),
+                    rs.getString("nomor_kamar"),
+                    rs.getString("tanggal_masuk"),
+                    rs.getString("tenggat_bayar"),
+                    rs.getInt("harga_bulan")
+                });
+            }
+            tableDataTenant.setModel(model);
+            tableDataTenant.getColumnModel().getColumn(0).setPreferredWidth(40);   // ID
+            tableDataTenant.getColumnModel().getColumn(1).setPreferredWidth(180);  // Nama Tenant
+            tableDataTenant.getColumnModel().getColumn(2).setPreferredWidth(140);  // Email
+            tableDataTenant.getColumnModel().getColumn(3).setPreferredWidth(100);  // No. HP
+            tableDataTenant.getColumnModel().getColumn(4).setPreferredWidth(80);   // No. Kamar
+            tableDataTenant.getColumnModel().getColumn(5).setPreferredWidth(100);  // Tanggal Masuk
+            tableDataTenant.getColumnModel().getColumn(6).setPreferredWidth(100);  // Tenggat Bayar
+            tableDataTenant.getColumnModel().getColumn(7).setPreferredWidth(100);  // Harga/Bulan
+            
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(this, "Gagal Memuat Data Tabel : " + e.getMessage());
+        }
     }
     
 
@@ -53,10 +98,15 @@ public class dataTenant extends javax.swing.JInternalFrame {
         tableDataTenant = new javax.swing.JTable();
 
         setBackground(new java.awt.Color(141, 141, 141));
-        setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Data Tenant Aktif"));
+        setBorder(javax.swing.BorderFactory.createTitledBorder("Data Tenant Aktif"));
         setForeground(java.awt.Color.cyan);
 
         btnRefresh.setText("Refresh");
+        btnRefresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRefreshActionPerformed(evt);
+            }
+        });
 
         btnEdit.setText("Edit Data Dipilih");
         btnEdit.addActionListener(new java.awt.event.ActionListener() {
@@ -72,27 +122,28 @@ public class dataTenant extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "No. Kamar", "Nama Tenant", "Tanggal Mulai", "Harga/bulan"
+                "ID", "Nama Tenant", "Email", "No. Handphone", "No. Kamar", "Tanggal Masuk", "Tenggat Bayar", "Harga/Bulan"
             }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
+        ));
+        tableDataTenant.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
         jScrollPane1.setViewportView(tableDataTenant);
         if (tableDataTenant.getColumnModel().getColumnCount() > 0) {
+            tableDataTenant.getColumnModel().getColumn(0).setResizable(false);
             tableDataTenant.getColumnModel().getColumn(0).setPreferredWidth(20);
+            tableDataTenant.getColumnModel().getColumn(1).setResizable(false);
+            tableDataTenant.getColumnModel().getColumn(2).setResizable(false);
+            tableDataTenant.getColumnModel().getColumn(3).setResizable(false);
+            tableDataTenant.getColumnModel().getColumn(4).setResizable(false);
+            tableDataTenant.getColumnModel().getColumn(5).setResizable(false);
+            tableDataTenant.getColumnModel().getColumn(6).setResizable(false);
+            tableDataTenant.getColumnModel().getColumn(7).setResizable(false);
         }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 790, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 890, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnHapus)
@@ -120,6 +171,10 @@ public class dataTenant extends javax.swing.JInternalFrame {
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnEditActionPerformed
+
+    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
+        // 
+    }//GEN-LAST:event_btnRefreshActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

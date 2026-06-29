@@ -4,6 +4,11 @@
  */
 package view.master;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Tricky-Laptop
@@ -47,6 +52,10 @@ public class tambahTenant extends javax.swing.JInternalFrame {
         cmbKamar = new javax.swing.JComboBox<>();
         btnSimpan = new javax.swing.JButton();
         btnReset = new javax.swing.JButton();
+        lblEmail = new javax.swing.JLabel();
+        txtEmail = new javax.swing.JTextField();
+        lblHandphone = new javax.swing.JLabel();
+        txtHandphone = new javax.swing.JTextField();
 
         setBorder(javax.swing.BorderFactory.createTitledBorder("Tambah Tenant Baru"));
 
@@ -62,12 +71,17 @@ public class tambahTenant extends javax.swing.JInternalFrame {
             }
         });
 
-        txtTanggal.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("d-M-y"))));
+        txtTanggal.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("dd-MM-YYYY"))));
         txtTanggal.setToolTipText("DD-MM-YYYY");
 
         cmbKamar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "==: Pilih Kamar :==", "Kamar 001", "Kamar 002", "Kamar 003", "Kamar 004", "Kamar 005", "Kamar 006", "Kamar 007", "Kamar 008", "Kamar 009", "Kamar 010", "Kamar 011" }));
 
         btnSimpan.setText("Simpan");
+        btnSimpan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSimpanActionPerformed(evt);
+            }
+        });
 
         btnReset.setText("Reset");
         btnReset.addActionListener(new java.awt.event.ActionListener() {
@@ -75,6 +89,10 @@ public class tambahTenant extends javax.swing.JInternalFrame {
                 btnResetActionPerformed(evt);
             }
         });
+
+        lblEmail.setText("Email");
+
+        lblHandphone.setText("No. Handphone");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -84,37 +102,50 @@ public class tambahTenant extends javax.swing.JInternalFrame {
                 .addGap(45, 45, 45)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblNama)
-                    .addComponent(lblTanggal)
                     .addComponent(lblKamar)
-                    .addComponent(btnSimpan))
-                .addGap(84, 84, 84)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txtNama)
-                    .addComponent(txtTanggal)
-                    .addComponent(cmbKamar, 0, 226, Short.MAX_VALUE)
-                    .addComponent(btnReset, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addContainerGap(355, Short.MAX_VALUE))
+                    .addComponent(btnSimpan)
+                    .addComponent(lblEmail)
+                    .addComponent(lblHandphone)
+                    .addComponent(lblTanggal))
+                .addGap(79, 79, 79)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtTanggal, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(txtNama)
+                        .addComponent(cmbKamar, 0, 226, Short.MAX_VALUE)
+                        .addComponent(btnReset, javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(txtEmail)
+                        .addComponent(txtHandphone)))
+                .addContainerGap(455, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(81, 81, 81)
+                .addGap(40, 40, 40)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblNama)
                     .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(47, 47, 47)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblTanggal)
-                    .addComponent(txtTanggal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(48, 48, 48)
+                    .addComponent(lblEmail)
+                    .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblHandphone)
+                    .addComponent(txtHandphone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblKamar)
                     .addComponent(cmbKamar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(116, 116, 116)
+                .addGap(15, 15, 15)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblTanggal)
+                    .addComponent(txtTanggal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(151, 151, 151)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSimpan)
                     .addComponent(btnReset))
-                .addContainerGap(149, Short.MAX_VALUE))
+                .addContainerGap(137, Short.MAX_VALUE))
         );
 
         pack();
@@ -125,17 +156,104 @@ public class tambahTenant extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txtNamaActionPerformed
 
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
-        // TODO add your handling code here:
+        txtNama.setText("");
+        txtEmail.setText("");
+        txtHandphone.setText("");
+        txtTanggal.setText("");
+        cmbKamar.setSelectedIndex(0);
     }//GEN-LAST:event_btnResetActionPerformed
+
+    private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
+        if(txtNama.getText().trim().isEmpty() || txtHandphone.getText().trim().isEmpty() || 
+        txtTanggal.getText().trim().isEmpty() || cmbKamar.getSelectedIndex() == -1){
+            javax.swing.JOptionPane.showMessageDialog(this, "Semua field (kecuali email) wajib diisi dan kamar harus dipilih!");
+            return;
+        }
+        
+        String nama = txtNama.getText();
+        String email = txtEmail.getText();
+        String noHp = txtHandphone.getText();
+        String noKamar = cmbKamar.getSelectedItem().toString();
+        String tglMasuk = txtTanggal.getText();
+        
+        //Tenggat Bayar = tglMasuk + 30
+        String tglMasukSQL = "";
+        String tglTenggatSQL = "";
+        try {
+            java.time.format.DateTimeFormatter formatCustom = java.time.format.DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            java.time.LocalDate tanggalMasukObj = java.time.LocalDate.parse(tglMasuk, formatCustom);
+            java.time.LocalDate tanggalTenggatObj = tanggalMasukObj.plusDays(30);
+            tglMasukSQL = tanggalMasukObj.toString();
+            tglTenggatSQL = tanggalTenggatObj.toString();
+        } catch (Exception e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Format tanggal salah! Gunakan format DD-MM-YYYY (Contoh: 29-06-2026)");
+            return;
+        }
+        
+        java.sql.Connection conn = null;
+        java.sql.PreparedStatement psCariHarga = null;
+        java.sql.PreparedStatement psInsert = null;
+        java.sql.ResultSet rs = null;
+        
+        try{
+            int hargaBulan = 0;
+            conn = aplikasikos.Connector.getKoneksi();
+            
+            String queryHarga = "SELECT harga_per_bulan FROM tblKamar WHERE nomor_kamar = ?";
+            psCariHarga = conn.prepareStatement(queryHarga);
+            psCariHarga.setString(1, noKamar);
+            rs = psCariHarga.executeQuery();
+            
+            if (rs.next()) {
+                hargaBulan = rs.getInt("harga_per_bulan"); // Mengisi variabel global blok try
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(this, "Data kamar tidak ditemukan di database!");
+                return;
+            }
+            String queryInsert = "INSERT INTO tblTenant (nama_tenant, email, nomor_hp, nomor_kamar, tanggal_masuk, tenggat_bayar, harga_bulan) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            psInsert = conn.prepareStatement(queryInsert);
+        
+            psInsert.setString(1, nama);
+            psInsert.setString(2, email);
+            psInsert.setString(3, noHp);
+            psInsert.setString(4, noKamar);
+            psInsert.setString(5, tglMasukSQL);
+            psInsert.setString(6, tglTenggatSQL); 
+            psInsert.setInt(7, hargaBulan);
+            
+            int hasil = psInsert.executeUpdate();
+            if (hasil > 0) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Data Tenant Berhasil Disimpan!");
+            
+                // D. Kosongkan form kembali setelah berhasil disimpan
+                txtNama.setText("");
+                txtEmail.setText("");
+                txtHandphone.setText("");
+                txtTanggal.setText("");
+                cmbKamar.setSelectedIndex(0);
+            }
+        }catch(Exception e){
+            javax.swing.JOptionPane.showMessageDialog(this, "Gagal menyimpan data: " + e.getMessage());
+        }finally{
+            // Menutup semua resource database
+            try { if (rs != null) rs.close(); } catch (Exception e) {}
+            try { if (psCariHarga != null) psCariHarga.close(); } catch (Exception e) {}
+            try { if (psInsert != null) psInsert.close(); } catch (Exception e) {}
+        }
+    }//GEN-LAST:event_btnSimpanActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnReset;
     private javax.swing.JButton btnSimpan;
     private javax.swing.JComboBox<String> cmbKamar;
+    private javax.swing.JLabel lblEmail;
+    private javax.swing.JLabel lblHandphone;
     private javax.swing.JLabel lblKamar;
     private javax.swing.JLabel lblNama;
     private javax.swing.JLabel lblTanggal;
+    private javax.swing.JTextField txtEmail;
+    private javax.swing.JTextField txtHandphone;
     private javax.swing.JTextField txtNama;
     private javax.swing.JFormattedTextField txtTanggal;
     // End of variables declaration//GEN-END:variables

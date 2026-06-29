@@ -54,17 +54,17 @@ public class frameUtama extends javax.swing.JFrame {
         container.setLayout(containerLayout);
         containerLayout.setHorizontalGroup(
             containerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, containerLayout.createSequentialGroup()
-                .addContainerGap(158, Short.MAX_VALUE)
+            .addGroup(containerLayout.createSequentialGroup()
+                .addGap(186, 186, 186)
                 .addComponent(jLabel1)
-                .addGap(126, 126, 126))
+                .addContainerGap(198, Short.MAX_VALUE))
         );
         containerLayout.setVerticalGroup(
             containerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(containerLayout.createSequentialGroup()
-                .addGap(260, 260, 260)
+                .addGap(270, 270, 270)
                 .addComponent(jLabel1)
-                .addContainerGap(292, Short.MAX_VALUE))
+                .addContainerGap(282, Short.MAX_VALUE))
         );
 
         menuAplikasi.setText("Aplikasi");
