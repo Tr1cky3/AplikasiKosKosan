@@ -5,6 +5,7 @@
 package view;
 
 import view.master.dataTenant;
+import view.master.tambahTenant;
 
 /**
  *
@@ -35,8 +36,12 @@ public class frameUtama extends javax.swing.JFrame {
         submenuClose = new javax.swing.JMenuItem();
         menuData = new javax.swing.JMenu();
         submenuDataTenant = new javax.swing.JMenuItem();
+        submenuTambahData = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(95, 95, 95));
+
+        container.setBackground(new java.awt.Color(95, 95, 95));
 
         javax.swing.GroupLayout containerLayout = new javax.swing.GroupLayout(container);
         container.setLayout(containerLayout);
@@ -70,6 +75,11 @@ public class frameUtama extends javax.swing.JFrame {
         jMenuBar1.add(menuAplikasi);
 
         menuData.setText("Data");
+        menuData.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuDataActionPerformed(evt);
+            }
+        });
 
         submenuDataTenant.setText("Data Tenant");
         submenuDataTenant.addActionListener(new java.awt.event.ActionListener() {
@@ -78,6 +88,14 @@ public class frameUtama extends javax.swing.JFrame {
             }
         });
         menuData.add(submenuDataTenant);
+
+        submenuTambahData.setText("Tambah Tenant");
+        submenuTambahData.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                submenuTambahDataActionPerformed(evt);
+            }
+        });
+        menuData.add(submenuTambahData);
 
         jMenuBar1.add(menuData);
 
@@ -98,10 +116,19 @@ public class frameUtama extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private dataTenant DataTenant = null;
+    private tambahTenant TambahData = null;
     private void submenuDataTenantActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submenuDataTenantActionPerformed
-        DataTenant = new dataTenant();
-        container.add(DataTenant);
-        DataTenant.setVisible(true);
+        if (TambahData != null){
+            TambahData.dispose();
+            TambahData = null;
+        }
+        if (DataTenant == null){
+            DataTenant = new dataTenant();
+            container.add(DataTenant);
+            DataTenant.setVisible(true);
+        }else{
+            DataTenant.toFront();
+        }
     }//GEN-LAST:event_submenuDataTenantActionPerformed
 
     private void submenuCloseAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submenuCloseAppActionPerformed
@@ -112,7 +139,28 @@ public class frameUtama extends javax.swing.JFrame {
         if (DataTenant != null){
             DataTenant.dispose();
         }
+        if (TambahData !=null){
+            TambahData.dispose();
+        }
     }//GEN-LAST:event_submenuCloseActionPerformed
+
+    private void menuDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuDataActionPerformed
+        
+    }//GEN-LAST:event_menuDataActionPerformed
+
+    private void submenuTambahDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submenuTambahDataActionPerformed
+        if (DataTenant != null){
+            DataTenant.dispose();
+            DataTenant = null;
+        }
+        if (TambahData == null){
+            TambahData = new tambahTenant();
+            container.add(TambahData);
+            TambahData.setVisible(true);
+        }else{
+            TambahData.toFront();
+        }
+    }//GEN-LAST:event_submenuTambahDataActionPerformed
 
     /**
      * @param args the command line arguments
@@ -158,5 +206,6 @@ public class frameUtama extends javax.swing.JFrame {
     private javax.swing.JMenuItem submenuClose;
     private javax.swing.JMenuItem submenuCloseApp;
     private javax.swing.JMenuItem submenuDataTenant;
+    private javax.swing.JMenuItem submenuTambahData;
     // End of variables declaration//GEN-END:variables
 }
