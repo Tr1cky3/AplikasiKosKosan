@@ -39,6 +39,7 @@ public class dataTenant extends javax.swing.JInternalFrame {
     
     public void tampilkanData(){
         DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("No"); 
         model.addColumn("ID");
         model.addColumn("Nama");
         model.addColumn("Email");
@@ -47,16 +48,19 @@ public class dataTenant extends javax.swing.JInternalFrame {
         model.addColumn("Tanggal Masuk");
         model.addColumn("Tenggat Bayar");
         model.addColumn("Harga/Bulan");
-        
+
         try{
             Connection conn = aplikasikos.Connector.getKoneksi(); 
             Statement stmt = conn.createStatement();
-            
+
             String query = "SELECT * FROM tblTenant ORDER BY id_tenant DESC";
             ResultSet rs = stmt.executeQuery(query);
-            
+
+            int noUrut = 1; 
+
             while (rs.next()) {
                 model.addRow(new Object[]{
+                    noUrut++,
                     rs.getInt("id_tenant"),
                     rs.getString("nama_tenant"),
                     rs.getString("email"),
@@ -68,15 +72,18 @@ public class dataTenant extends javax.swing.JInternalFrame {
                 });
             }
             tableDataTenant.setModel(model);
-            tableDataTenant.getColumnModel().getColumn(0).setPreferredWidth(40);   // ID
-            tableDataTenant.getColumnModel().getColumn(1).setPreferredWidth(180);  // Nama Tenant
-            tableDataTenant.getColumnModel().getColumn(2).setPreferredWidth(140);  // Email
-            tableDataTenant.getColumnModel().getColumn(3).setPreferredWidth(100);  // No. HP
-            tableDataTenant.getColumnModel().getColumn(4).setPreferredWidth(80);   // No. Kamar
-            tableDataTenant.getColumnModel().getColumn(5).setPreferredWidth(100);  // Tanggal Masuk
-            tableDataTenant.getColumnModel().getColumn(6).setPreferredWidth(100);  // Tenggat Bayar
-            tableDataTenant.getColumnModel().getColumn(7).setPreferredWidth(100);  // Harga/Bulan
-            
+
+            // 4. Sesuaikan indeks kolom pengaturan lebar karena ada penambahan kolom "No" di depan
+            tableDataTenant.getColumnModel().getColumn(0).setPreferredWidth(30);   // No Urut
+            tableDataTenant.getColumnModel().getColumn(1).setPreferredWidth(40);   // ID Tenant
+            tableDataTenant.getColumnModel().getColumn(2).setPreferredWidth(180);  // Nama Tenant
+            tableDataTenant.getColumnModel().getColumn(3).setPreferredWidth(140);  // Email
+            tableDataTenant.getColumnModel().getColumn(4).setPreferredWidth(100);  // No. HP
+            tableDataTenant.getColumnModel().getColumn(5).setPreferredWidth(80);   // No. Kamar
+            tableDataTenant.getColumnModel().getColumn(6).setPreferredWidth(100);  // Tanggal Masuk
+            tableDataTenant.getColumnModel().getColumn(7).setPreferredWidth(100);  // Tenggat Bayar
+            tableDataTenant.getColumnModel().getColumn(8).setPreferredWidth(100);  // Harga/Bulan
+
         }catch(Exception e){
             JOptionPane.showMessageDialog(this, "Gagal Memuat Data Tabel : " + e.getMessage());
         }
@@ -97,6 +104,8 @@ public class dataTenant extends javax.swing.JInternalFrame {
         btnHapus = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableDataTenant = new javax.swing.JTable();
+        txtSearch = new javax.swing.JTextField();
+        btnSearch = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(141, 141, 141));
         setBorder(javax.swing.BorderFactory.createTitledBorder("Data Tenant Aktif"));
@@ -145,6 +154,15 @@ public class dataTenant extends javax.swing.JInternalFrame {
             tableDataTenant.getColumnModel().getColumn(7).setResizable(false);
         }
 
+        txtSearch.setToolTipText("Kamar 001 sampai Kamar 011");
+
+        btnSearch.setText("Cari No. Kamar");
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -157,6 +175,10 @@ public class dataTenant extends javax.swing.JInternalFrame {
                 .addComponent(btnEdit)
                 .addGap(18, 18, 18)
                 .addComponent(btnRefresh)
+                .addGap(26, 26, 26)
+                .addComponent(btnSearch)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -166,7 +188,9 @@ public class dataTenant extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnHapus)
                     .addComponent(btnEdit)
-                    .addComponent(btnRefresh))
+                    .addComponent(btnRefresh)
+                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSearch))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 495, Short.MAX_VALUE))
         );
@@ -182,7 +206,7 @@ public class dataTenant extends javax.swing.JInternalFrame {
         }
 
         // 1. Ambil data dari baris tabel yang dipilih
-        String id = tableDataTenant.getValueAt(baris, 0).toString();
+        String id = tableDataTenant.getValueAt(baris, 1).toString();
         String nama = tableDataTenant.getValueAt(baris, 1).toString();
         String email = tableDataTenant.getValueAt(baris, 2).toString() != null ? tableDataTenant.getValueAt(baris, 2).toString() : "";
         String hp = tableDataTenant.getValueAt(baris, 3).toString();
@@ -208,7 +232,7 @@ public class dataTenant extends javax.swing.JInternalFrame {
             javax.swing.JOptionPane.showMessageDialog(this, "Silakan pilih salah satu data pada tabel yang ingin dihapus terlebih dahulu!");
             return;
         }
-        String idTenant = tableDataTenant.getValueAt(barisTerpilih, 0).toString();
+        String idTenant = tableDataTenant.getValueAt(barisTerpilih, 1).toString();
         String namaTenant = tableDataTenant.getValueAt(barisTerpilih, 1).toString();
         int konfirmasi = javax.swing.JOptionPane.showConfirmDialog(this, 
             "Apakah Anda yakin ingin menghapus data tenant dengan nama '" + namaTenant + "'?", 
@@ -242,12 +266,64 @@ public class dataTenant extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_btnHapusActionPerformed
 
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        String cariKamar = txtSearch.getText().trim();
+        if (cariKamar.isEmpty()) {
+            btnRefreshActionPerformed(null); // Memanggil tombol refresh untuk menampilkan semua data
+            return;
+        }
+        
+        javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) tableDataTenant.getModel();
+        model.setRowCount(0);
+        
+        java.sql.Connection conn = null;
+        java.sql.PreparedStatement psSearch = null;
+        java.sql.ResultSet rs = null;
+        
+        try{
+            conn = aplikasikos.Connector.getKoneksi();
+            String querySearch = "SELECT * FROM tblTenant WHERE nomor_kamar LIKE ?";
+            psSearch = conn.prepareStatement(querySearch);
+            
+            psSearch.setString(1, "%" + cariKamar + "%");
+            
+            rs = psSearch.executeQuery();
+            
+            boolean dataDitemukan = false;
+            while(rs.next()){
+                dataDitemukan = true;
+                String id = rs.getString("id_tenant");
+                String nama = rs.getString("nama_tenant");
+                String email = rs.getString("email");
+                String hp = rs.getString("nomor_hp");
+                String kamar = rs.getString("nomor_kamar");
+                String tglMasuk = rs.getString("tanggal_masuk");
+                String tglTenggat = rs.getString("tenggat_bayar");
+                int harga = rs.getInt("harga_bulan");
+                
+                model.addRow(new Object[]{id, nama, email, hp, kamar, tglMasuk, tglTenggat, harga});
+            }
+            if (!dataDitemukan) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Data tenant di Kamar '" + cariKamar + "' tidak ditemukan!");
+                btnRefreshActionPerformed(null); // Kembalikan data ke semula
+                txtSearch.setText("");
+            }
+        } catch(Exception e){
+            javax.swing.JOptionPane.showMessageDialog(this, "Gagal melakukan pencarian: " + e.getMessage());
+        } finally {
+            try { if (rs != null) rs.close(); } catch (Exception e) {}
+            try { if (psSearch != null) psSearch.close(); } catch (Exception e) {}
+        }
+    }//GEN-LAST:event_btnSearchActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnHapus;
     private javax.swing.JButton btnRefresh;
+    private javax.swing.JButton btnSearch;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tableDataTenant;
+    private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
 }

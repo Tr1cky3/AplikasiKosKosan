@@ -79,6 +79,7 @@ public class tambahTenant extends javax.swing.JInternalFrame {
         lblHandphone = new javax.swing.JLabel();
         txtHandphone = new javax.swing.JTextField();
 
+        setBackground(new java.awt.Color(141, 141, 141));
         setBorder(javax.swing.BorderFactory.createTitledBorder("Tambah Tenant Baru"));
 
         lblNama.setText("Nama Tenant ");
@@ -130,14 +131,13 @@ public class tambahTenant extends javax.swing.JInternalFrame {
                     .addComponent(lblHandphone)
                     .addComponent(lblTanggal))
                 .addGap(79, 79, 79)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(txtTanggal, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(txtNama)
-                        .addComponent(cmbKamar, 0, 226, Short.MAX_VALUE)
-                        .addComponent(btnReset, javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(txtEmail)
-                        .addComponent(txtHandphone)))
+                    .addComponent(txtNama)
+                    .addComponent(cmbKamar, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtEmail)
+                    .addComponent(txtHandphone)
+                    .addComponent(btnReset, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap(455, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
