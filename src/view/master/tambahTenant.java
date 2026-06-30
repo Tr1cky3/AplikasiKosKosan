@@ -247,16 +247,37 @@ public class tambahTenant extends javax.swing.JInternalFrame {
                 return;
             }
             if (idTenantEdit.equals("")){
-            String queryInsert = "INSERT INTO tbltenant (nama_tenant, email, nomor_hp, nomor_kamar, tanggal_masuk, tenggat_bayar, harga_bulan) VALUES (?, ?, ?, ?, ?, ?, ?)";
-            psExecute = conn.prepareStatement(queryInsert);
-        
-            psExecute.setString(1, nama);
-            psExecute.setString(2, email);
-            psExecute.setString(3, noHp);
-            psExecute.setString(4, noKamar);
-            psExecute.setString(5, tglMasukSQL);
-            psExecute.setString(6, tglTenggatSQL); 
-            psExecute.setInt(7, hargaBulan);
+                java.sql.PreparedStatement psCekKamar = null;
+                java.sql.ResultSet rsCekKamar = null;
+                try {
+                    String queryCekKamar = "SELECT nama_tenant FROM tbltenant WHERE nomor_kamar = ?";
+                    psCekKamar = conn.prepareStatement(queryCekKamar);
+                    psCekKamar.setString(1, noKamar);
+                    rsCekKamar = psCekKamar.executeQuery();
+                    
+                    if (rsCekKamar.next()) {
+                        String namaPenghuni = rsCekKamar.getString("nama_tenant");
+                        javax.swing.JOptionPane.showMessageDialog(this, 
+                            "Gagal Menambahkan: " + noKamar + " sudah digunakan/ditempati oleh " + namaPenghuni + "!", 
+                            "Peringatan Kamar Penuh", 
+                            javax.swing.JOptionPane.WARNING_MESSAGE);
+                        return; // Membatalkan proses INSERT di bawahnya jika kamar penuh
+                    }
+                } finally {
+                    if (rsCekKamar != null) rsCekKamar.close();
+                    if (psCekKamar != null) psCekKamar.close();
+                }
+                
+                String queryInsert = "INSERT INTO tbltenant (nama_tenant, email, nomor_hp, nomor_kamar, tanggal_masuk, tenggat_bayar, harga_bulan) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                psExecute = conn.prepareStatement(queryInsert);
+
+                psExecute.setString(1, nama);
+                psExecute.setString(2, email);
+                psExecute.setString(3, noHp);
+                psExecute.setString(4, noKamar);
+                psExecute.setString(5, tglMasukSQL);
+                psExecute.setString(6, tglTenggatSQL); 
+                psExecute.setInt(7, hargaBulan);
             } else {
                 String queryUpdate = "UPDATE tblTenant SET nama_tenant=?, email=?, nomor_hp=?, nomor_kamar=?, tanggal_masuk=?, tenggat_bayar=?, harga_bulan=? WHERE id_tenant=?";
                 psExecute = conn.prepareStatement(queryUpdate);
@@ -272,13 +293,18 @@ public class tambahTenant extends javax.swing.JInternalFrame {
             }
             int hasil = psExecute.executeUpdate();
             if (hasil > 0) {
-                javax.swing.JOptionPane.showMessageDialog(this, "Data Tenant Berhasil Disimpan!");
-            
-                txtNama.setText("");
-                txtEmail.setText("");
-                txtHandphone.setText("");
-                txtTanggal.setText("");
-                cmbKamar.setSelectedIndex(0);
+                String pesanSukses = idTenantEdit.equals("") ? "Data Tenant Berhasil Disimpan!" : "Data Tenant Berhasil Diperbarui!";
+                javax.swing.JOptionPane.showMessageDialog(this, pesanSukses);
+                
+                if (!idTenantEdit.equals("")) {
+                    this.dispose();
+                } else {
+                    txtNama.setText("");
+                    txtEmail.setText("");
+                    txtHandphone.setText("");
+                    txtTanggal.setText("");
+                    cmbKamar.setSelectedIndex(0);
+                }
             }
         }catch(Exception e){
             javax.swing.JOptionPane.showMessageDialog(this, "Gagal menyimpan data: " + e.getMessage());

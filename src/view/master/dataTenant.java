@@ -207,11 +207,15 @@ public class dataTenant extends javax.swing.JInternalFrame {
 
         // 1. Ambil data dari baris tabel yang dipilih
         String id = tableDataTenant.getValueAt(baris, 1).toString();
-        String nama = tableDataTenant.getValueAt(baris, 1).toString();
-        String email = tableDataTenant.getValueAt(baris, 2).toString() != null ? tableDataTenant.getValueAt(baris, 2).toString() : "";
-        String hp = tableDataTenant.getValueAt(baris, 3).toString();
-        String kamar = tableDataTenant.getValueAt(baris, 4).toString();
-        String tanggal = tableDataTenant.getValueAt(baris, 5).toString(); 
+        String nama = tableDataTenant.getValueAt(baris, 2).toString();
+        Object objEmail = tableDataTenant.getValueAt(baris, 3);
+        String email = "";
+        if (objEmail != null) {
+            email = objEmail.toString().trim();
+        }
+        String hp = tableDataTenant.getValueAt(baris, 4).toString();
+        String kamar = tableDataTenant.getValueAt(baris, 5).toString();
+        String tanggal = tableDataTenant.getValueAt(baris, 6).toString(); 
 
         // 2. Panggil tambahTenant dengan constructor khusus EDIT
         tambahTenant formEdit = new tambahTenant(id, nama, email, hp, kamar, tanggal);
