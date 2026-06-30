@@ -4,6 +4,7 @@
  */
 package view.master;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
@@ -116,6 +117,11 @@ public class dataTenant extends javax.swing.JInternalFrame {
         });
 
         btnHapus.setText("Hapus Data Dipilih");
+        btnHapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHapusActionPerformed(evt);
+            }
+        });
 
         tableDataTenant.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -169,12 +175,72 @@ public class dataTenant extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
-        // TODO add your handling code here:
+        int baris = tableDataTenant.getSelectedRow();
+        if (baris == -1) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Silakan pilih data tenant di tabel yang ingin di-edit!");
+            return;
+        }
+
+        // 1. Ambil data dari baris tabel yang dipilih
+        String id = tableDataTenant.getValueAt(baris, 0).toString();
+        String nama = tableDataTenant.getValueAt(baris, 1).toString();
+        String email = tableDataTenant.getValueAt(baris, 2).toString() != null ? tableDataTenant.getValueAt(baris, 2).toString() : "";
+        String hp = tableDataTenant.getValueAt(baris, 3).toString();
+        String kamar = tableDataTenant.getValueAt(baris, 4).toString();
+        String tanggal = tableDataTenant.getValueAt(baris, 5).toString(); 
+
+        // 2. Panggil tambahTenant dengan constructor khusus EDIT
+        tambahTenant formEdit = new tambahTenant(id, nama, email, hp, kamar, tanggal);
+
+        // 3. Tampilkan ke JDesktopPane utama kamu
+        getParent().add(formEdit);
+        formEdit.setVisible(true);
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
-        // 
+        tampilkanData();
     }//GEN-LAST:event_btnRefreshActionPerformed
+
+    private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
+        int barisTerpilih = tableDataTenant.getSelectedRow();
+    
+        if (barisTerpilih == -1) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Silakan pilih salah satu data pada tabel yang ingin dihapus terlebih dahulu!");
+            return;
+        }
+        String idTenant = tableDataTenant.getValueAt(barisTerpilih, 0).toString();
+        String namaTenant = tableDataTenant.getValueAt(barisTerpilih, 1).toString();
+        int konfirmasi = javax.swing.JOptionPane.showConfirmDialog(this, 
+            "Apakah Anda yakin ingin menghapus data tenant dengan nama '" + namaTenant + "'?", 
+            "Konfirmasi Hapus Data", 
+            javax.swing.JOptionPane.YES_NO_OPTION);
+        
+        if(konfirmasi == javax.swing.JOptionPane.YES_OPTION){
+            java.sql.Connection conn = null;
+            java.sql.PreparedStatement psDelete = null;
+            try {
+                conn = aplikasikos.Connector.getKoneksi();
+            
+                // Query SQL untuk menghapus data berdasarkan ID primary key
+                String queryDelete = "DELETE FROM tblTenant WHERE id_tenant = ?"; 
+                psDelete = conn.prepareStatement(queryDelete);
+            
+                psDelete.setString(1, idTenant);
+
+                int hasil = psDelete.executeUpdate();
+                if (hasil > 0){
+                    javax.swing.JOptionPane.showMessageDialog(this, "Data Tenant Berhasil Dihapus dari Database!");
+                    btnRefreshActionPerformed(null);
+                }
+            }catch(Exception e){
+                javax.swing.JOptionPane.showMessageDialog(this, "Gagal menghapus data: " + e.getMessage());
+            }finally{
+                try{ 
+                    if (psDelete != null) psDelete.close(); 
+                }catch(Exception e) {}
+            }
+        }
+    }//GEN-LAST:event_btnHapusActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

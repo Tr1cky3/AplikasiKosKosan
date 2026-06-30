@@ -18,6 +18,9 @@ public class tambahTenant extends javax.swing.JInternalFrame {
     /**
      * Creates new form formTambahTenant
      */
+    
+    private String idTenantEdit = "";
+    
     public tambahTenant() {
         initComponents();
         // Mengambil UI dari JInternalFrame
@@ -33,6 +36,25 @@ public class tambahTenant extends javax.swing.JInternalFrame {
             northPane.removeMouseMotionListener(listener);
             }
         }
+    }
+    
+    // Constructor BARU (untuk EDIT data)
+    public tambahTenant(String id, String nama, String email, String hp, String kamar, String tanggal) {
+        initComponents();
+        
+        // 1. Simpan ID ke variabel global agar bisa dipakai saat query UPDATE nanti
+        this.idTenantEdit = id;
+        
+        // 2. Ubah judul Form dan teks Tombol agar menyesuaikan mode Edit
+        this.setTitle("Edit Data Tenant - ID: " + id);
+        btnSimpan.setText("Update Data"); 
+        
+        // 3. Set nilai komponen GUI sesuai data yang dipilih dari tabel
+        txtNama.setText(nama);
+        txtEmail.setText(email);
+        txtHandphone.setText(hp);
+        cmbKamar.setSelectedItem(kamar);
+        txtTanggal.setText(tanggal);
     }
 
     /**
@@ -71,8 +93,8 @@ public class tambahTenant extends javax.swing.JInternalFrame {
             }
         });
 
-        txtTanggal.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("dd-MM-YYYY"))));
-        txtTanggal.setToolTipText("DD-MM-YYYY");
+        txtTanggal.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("dd MMMM yyyy"))));
+        txtTanggal.setToolTipText("Ex : 01 January 2001");
 
         cmbKamar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "==: Pilih Kamar :==", "Kamar 001", "Kamar 002", "Kamar 003", "Kamar 004", "Kamar 005", "Kamar 006", "Kamar 007", "Kamar 008", "Kamar 009", "Kamar 010", "Kamar 011" }));
 
@@ -165,7 +187,7 @@ public class tambahTenant extends javax.swing.JInternalFrame {
 
     private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
         if(txtNama.getText().trim().isEmpty() || txtHandphone.getText().trim().isEmpty() || 
-        txtTanggal.getText().trim().isEmpty() || cmbKamar.getSelectedIndex() == -1){
+        txtTanggal.getText().trim().isEmpty() || cmbKamar.getSelectedIndex() == 0){
             javax.swing.JOptionPane.showMessageDialog(this, "Semua field (kecuali email) wajib diisi dan kamar harus dipilih!");
             return;
         }
@@ -174,32 +196,46 @@ public class tambahTenant extends javax.swing.JInternalFrame {
         String email = txtEmail.getText();
         String noHp = txtHandphone.getText();
         String noKamar = cmbKamar.getSelectedItem().toString();
-        String tglMasuk = txtTanggal.getText();
+        String tglMasuk = txtTanggal.getText(); // Hasil dari form: contoh "05 June 2026" atau "05 Juni 2026"
         
-        //Tenggat Bayar = tglMasuk + 30
         String tglMasukSQL = "";
         String tglTenggatSQL = "";
         try {
-            java.time.format.DateTimeFormatter formatCustom = java.time.format.DateTimeFormatter.ofPattern("dd-MM-yyyy");
-            java.time.LocalDate tanggalMasukObj = java.time.LocalDate.parse(tglMasuk, formatCustom);
+            // 1. Definisikan formatter yang mengenali teks nama bulan Indonesia & Inggris
+            java.time.format.DateTimeFormatter formatTeksIndo = java.time.format.DateTimeFormatter.ofPattern("dd MMMM yyyy", new java.util.Locale("id", "ID"));
+            java.time.format.DateTimeFormatter formatTeksEng = java.time.format.DateTimeFormatter.ofPattern("dd MMMM yyyy", java.util.Locale.ENGLISH);
+            
+            java.time.LocalDate tanggalMasukObj;
+            
+            // 2. Coba parse menggunakan standar bahasa Indonesia dulu, jika gagal coba bahasa Inggris
+            try {
+                tanggalMasukObj = java.time.LocalDate.parse(tglMasuk, formatTeksIndo);
+            } catch (Exception ex) {
+                tanggalMasukObj = java.time.LocalDate.parse(tglMasuk, formatTeksEng);
+            }
+            
+            // 3. Hitung tanggal tenggat otomatis +30 hari
             java.time.LocalDate tanggalTenggatObj = tanggalMasukObj.plusDays(30);
+            
+            // 4. Ubah ke format standar database MySQL (yyyy-MM-dd)
             tglMasukSQL = tanggalMasukObj.toString();
             tglTenggatSQL = tanggalTenggatObj.toString();
+            
         } catch (Exception e) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Format tanggal salah! Gunakan format DD-MM-YYYY (Contoh: 29-06-2026)");
+            javax.swing.JOptionPane.showMessageDialog(this, "Format tanggal salah! Gunakan format teks (Contoh: 05 Juni 2026 atau 05 June 2026)");
             return;
         }
         
         java.sql.Connection conn = null;
         java.sql.PreparedStatement psCariHarga = null;
-        java.sql.PreparedStatement psInsert = null;
+        java.sql.PreparedStatement psExecute = null;
         java.sql.ResultSet rs = null;
         
         try{
             int hargaBulan = 0;
             conn = aplikasikos.Connector.getKoneksi();
             
-            String queryHarga = "SELECT harga_per_bulan FROM tblKamar WHERE nomor_kamar = ?";
+            String queryHarga = "SELECT harga_per_bulan FROM tblkamar WHERE nomor_kamar = ?";
             psCariHarga = conn.prepareStatement(queryHarga);
             psCariHarga.setString(1, noKamar);
             rs = psCariHarga.executeQuery();
@@ -210,22 +246,34 @@ public class tambahTenant extends javax.swing.JInternalFrame {
                 javax.swing.JOptionPane.showMessageDialog(this, "Data kamar tidak ditemukan di database!");
                 return;
             }
-            String queryInsert = "INSERT INTO tblTenant (nama_tenant, email, nomor_hp, nomor_kamar, tanggal_masuk, tenggat_bayar, harga_bulan) VALUES (?, ?, ?, ?, ?, ?, ?)";
-            psInsert = conn.prepareStatement(queryInsert);
+            if (idTenantEdit.equals("")){
+            String queryInsert = "INSERT INTO tbltenant (nama_tenant, email, nomor_hp, nomor_kamar, tanggal_masuk, tenggat_bayar, harga_bulan) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            psExecute = conn.prepareStatement(queryInsert);
         
-            psInsert.setString(1, nama);
-            psInsert.setString(2, email);
-            psInsert.setString(3, noHp);
-            psInsert.setString(4, noKamar);
-            psInsert.setString(5, tglMasukSQL);
-            psInsert.setString(6, tglTenggatSQL); 
-            psInsert.setInt(7, hargaBulan);
-            
-            int hasil = psInsert.executeUpdate();
+            psExecute.setString(1, nama);
+            psExecute.setString(2, email);
+            psExecute.setString(3, noHp);
+            psExecute.setString(4, noKamar);
+            psExecute.setString(5, tglMasukSQL);
+            psExecute.setString(6, tglTenggatSQL); 
+            psExecute.setInt(7, hargaBulan);
+            } else {
+                String queryUpdate = "UPDATE tblTenant SET nama_tenant=?, email=?, nomor_hp=?, nomor_kamar=?, tanggal_masuk=?, tenggat_bayar=?, harga_bulan=? WHERE id_tenant=?";
+                psExecute = conn.prepareStatement(queryUpdate);
+        
+                psExecute.setString(1, nama);
+                psExecute.setString(2, email);
+                psExecute.setString(3, noHp);
+                psExecute.setString(4, noKamar);
+                psExecute.setString(5, tglMasukSQL);
+                psExecute.setString(6, tglTenggatSQL); 
+                psExecute.setInt(7, hargaBulan);
+                psExecute.setString(8, idTenantEdit);
+            }
+            int hasil = psExecute.executeUpdate();
             if (hasil > 0) {
                 javax.swing.JOptionPane.showMessageDialog(this, "Data Tenant Berhasil Disimpan!");
             
-                // D. Kosongkan form kembali setelah berhasil disimpan
                 txtNama.setText("");
                 txtEmail.setText("");
                 txtHandphone.setText("");
@@ -238,7 +286,7 @@ public class tambahTenant extends javax.swing.JInternalFrame {
             // Menutup semua resource database
             try { if (rs != null) rs.close(); } catch (Exception e) {}
             try { if (psCariHarga != null) psCariHarga.close(); } catch (Exception e) {}
-            try { if (psInsert != null) psInsert.close(); } catch (Exception e) {}
+            try { if (psExecute != null) psExecute.close(); } catch (Exception e) {}
         }
     }//GEN-LAST:event_btnSimpanActionPerformed
 

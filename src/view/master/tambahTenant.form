@@ -113,9 +113,9 @@
     <Component class="javax.swing.JFormattedTextField" name="txtTanggal">
       <Properties>
         <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.editors.AbstractFormatterFactoryEditor">
-          <Format format="dd-MM-YYYY" subtype="-1" type="1"/>
+          <Format format="dd MMMM yyyy" subtype="-1" type="1"/>
         </Property>
-        <Property name="toolTipText" type="java.lang.String" value="DD-MM-YYYY"/>
+        <Property name="toolTipText" type="java.lang.String" value="Ex : 01 January 2001"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JComboBox" name="cmbKamar">
