@@ -41,15 +41,11 @@ public class tambahTenant extends javax.swing.JInternalFrame {
     // Constructor BARU (untuk EDIT data)
     public tambahTenant(String id, String nama, String email, String hp, String kamar, String tanggal) {
         initComponents();
-        
-        // 1. Simpan ID ke variabel global agar bisa dipakai saat query UPDATE nanti
         this.idTenantEdit = id;
         
-        // 2. Ubah judul Form dan teks Tombol agar menyesuaikan mode Edit
         this.setTitle("Edit Data Tenant - ID: " + id);
         btnSimpan.setText("Update Data"); 
         
-        // 3. Set nilai komponen GUI sesuai data yang dipilih dari tabel
         txtNama.setText(nama);
         txtEmail.setText(email);
         txtHandphone.setText(hp);
@@ -196,28 +192,26 @@ public class tambahTenant extends javax.swing.JInternalFrame {
         String email = txtEmail.getText();
         String noHp = txtHandphone.getText();
         String noKamar = cmbKamar.getSelectedItem().toString();
-        String tglMasuk = txtTanggal.getText(); // Hasil dari form: contoh "05 June 2026" atau "05 Juni 2026"
+        String tglMasuk = txtTanggal.getText();
         
         String tglMasukSQL = "";
         String tglTenggatSQL = "";
         try {
-            // 1. Definisikan formatter yang mengenali teks nama bulan Indonesia & Inggris
+            //Definisikan formatter yang mengenali teks nama bulan Indonesia & Inggris
             java.time.format.DateTimeFormatter formatTeksIndo = java.time.format.DateTimeFormatter.ofPattern("dd MMMM yyyy", new java.util.Locale("id", "ID"));
             java.time.format.DateTimeFormatter formatTeksEng = java.time.format.DateTimeFormatter.ofPattern("dd MMMM yyyy", java.util.Locale.ENGLISH);
             
             java.time.LocalDate tanggalMasukObj;
             
-            // 2. Coba parse menggunakan standar bahasa Indonesia dulu, jika gagal coba bahasa Inggris
+            //Coba parse menggunakan standar bahasa Indonesia dulu, jika gagal coba bahasa Inggris
             try {
                 tanggalMasukObj = java.time.LocalDate.parse(tglMasuk, formatTeksIndo);
             } catch (Exception ex) {
                 tanggalMasukObj = java.time.LocalDate.parse(tglMasuk, formatTeksEng);
             }
-            
-            // 3. Hitung tanggal tenggat otomatis +30 hari
+            //tglTenggat = tglMasuk + 30
             java.time.LocalDate tanggalTenggatObj = tanggalMasukObj.plusDays(30);
             
-            // 4. Ubah ke format standar database MySQL (yyyy-MM-dd)
             tglMasukSQL = tanggalMasukObj.toString();
             tglTenggatSQL = tanggalTenggatObj.toString();
             
@@ -241,7 +235,7 @@ public class tambahTenant extends javax.swing.JInternalFrame {
             rs = psCariHarga.executeQuery();
             
             if (rs.next()) {
-                hargaBulan = rs.getInt("harga_per_bulan"); // Mengisi variabel global blok try
+                hargaBulan = rs.getInt("harga_per_bulan");
             } else {
                 javax.swing.JOptionPane.showMessageDialog(this, "Data kamar tidak ditemukan di database!");
                 return;

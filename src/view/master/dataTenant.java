@@ -73,7 +73,6 @@ public class dataTenant extends javax.swing.JInternalFrame {
             }
             tableDataTenant.setModel(model);
 
-            // 4. Sesuaikan indeks kolom pengaturan lebar karena ada penambahan kolom "No" di depan
             tableDataTenant.getColumnModel().getColumn(0).setPreferredWidth(30);   // No Urut
             tableDataTenant.getColumnModel().getColumn(1).setPreferredWidth(40);   // ID Tenant
             tableDataTenant.getColumnModel().getColumn(2).setPreferredWidth(180);  // Nama Tenant
@@ -205,7 +204,6 @@ public class dataTenant extends javax.swing.JInternalFrame {
             return;
         }
 
-        // 1. Ambil data dari baris tabel yang dipilih
         String id = tableDataTenant.getValueAt(baris, 1).toString();
         String nama = tableDataTenant.getValueAt(baris, 2).toString();
         Object objEmail = tableDataTenant.getValueAt(baris, 3);
@@ -217,10 +215,8 @@ public class dataTenant extends javax.swing.JInternalFrame {
         String kamar = tableDataTenant.getValueAt(baris, 5).toString();
         String tanggal = tableDataTenant.getValueAt(baris, 6).toString(); 
 
-        // 2. Panggil tambahTenant dengan constructor khusus EDIT
         tambahTenant formEdit = new tambahTenant(id, nama, email, hp, kamar, tanggal);
 
-        // 3. Tampilkan ke JDesktopPane utama kamu
         getParent().add(formEdit);
         formEdit.setVisible(true);
     }//GEN-LAST:event_btnEditActionPerformed
@@ -249,7 +245,6 @@ public class dataTenant extends javax.swing.JInternalFrame {
             try {
                 conn = aplikasikos.Connector.getKoneksi();
             
-                // Query SQL untuk menghapus data berdasarkan ID primary key
                 String queryDelete = "DELETE FROM tblTenant WHERE id_tenant = ?"; 
                 psDelete = conn.prepareStatement(queryDelete);
             
@@ -309,7 +304,7 @@ public class dataTenant extends javax.swing.JInternalFrame {
             }
             if (!dataDitemukan) {
                 javax.swing.JOptionPane.showMessageDialog(this, "Data tenant di Kamar '" + cariKamar + "' tidak ditemukan!");
-                btnRefreshActionPerformed(null); // Kembalikan data ke semula
+                btnRefreshActionPerformed(null);
                 txtSearch.setText("");
             }
         } catch(Exception e){
