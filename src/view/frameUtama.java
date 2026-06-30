@@ -18,6 +18,11 @@ public class frameUtama extends javax.swing.JFrame {
      */
     public frameUtama() {
         initComponents();
+        menuData.setEnabled(false);
+        submenuDataTenant.setEnabled(false);
+        submenuTambahData.setEnabled(false);
+        btnLogout.setEnabled(false);
+        btnLogout.setVisible(false);
     }
 
     /**
@@ -30,7 +35,13 @@ public class frameUtama extends javax.swing.JFrame {
     private void initComponents() {
 
         container = new javax.swing.JDesktopPane();
-        jLabel1 = new javax.swing.JLabel();
+        lblWelcome = new javax.swing.JLabel();
+        txtUsername = new javax.swing.JTextField();
+        lblUsername = new javax.swing.JLabel();
+        txtPassword = new javax.swing.JPasswordField();
+        lblPassword = new javax.swing.JLabel();
+        btnLogin = new javax.swing.JButton();
+        btnLogout = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         menuAplikasi = new javax.swing.JMenu();
         submenuCloseApp = new javax.swing.JMenuItem();
@@ -44,27 +55,95 @@ public class frameUtama extends javax.swing.JFrame {
 
         container.setBackground(new java.awt.Color(95, 95, 95));
 
-        jLabel1.setFont(new java.awt.Font("MS UI Gothic", 0, 24)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Selamat Datang, Gunakan menu Data untuk memulai");
+        lblWelcome.setFont(new java.awt.Font("MS UI Gothic", 0, 24)); // NOI18N
+        lblWelcome.setForeground(new java.awt.Color(255, 255, 255));
+        lblWelcome.setText("Selamat Datang, Silahkan Login Terlebih Dahulu");
 
-        container.setLayer(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        txtUsername.setToolTipText("Username");
+        txtUsername.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtUsernameActionPerformed(evt);
+            }
+        });
+
+        lblUsername.setForeground(new java.awt.Color(255, 255, 255));
+        lblUsername.setText("Username");
+
+        txtPassword.setToolTipText("Password");
+
+        lblPassword.setForeground(new java.awt.Color(255, 255, 255));
+        lblPassword.setText("Password");
+
+        btnLogin.setText("Login");
+        btnLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLoginActionPerformed(evt);
+            }
+        });
+
+        btnLogout.setText("Logout");
+        btnLogout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLogoutActionPerformed(evt);
+            }
+        });
+
+        container.setLayer(lblWelcome, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        container.setLayer(txtUsername, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        container.setLayer(lblUsername, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        container.setLayer(txtPassword, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        container.setLayer(lblPassword, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        container.setLayer(btnLogin, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        container.setLayer(btnLogout, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout containerLayout = new javax.swing.GroupLayout(container);
         container.setLayout(containerLayout);
         containerLayout.setHorizontalGroup(
             containerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, containerLayout.createSequentialGroup()
+                .addContainerGap(214, Short.MAX_VALUE)
+                .addGroup(containerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(lblWelcome)
+                    .addGroup(containerLayout.createSequentialGroup()
+                        .addGroup(containerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(containerLayout.createSequentialGroup()
+                                .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, containerLayout.createSequentialGroup()
+                                .addComponent(lblUsername)
+                                .addGap(239, 239, 239)))
+                        .addGroup(containerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblPassword)
+                            .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(213, 213, 213))
             .addGroup(containerLayout.createSequentialGroup()
-                .addGap(186, 186, 186)
-                .addComponent(jLabel1)
-                .addContainerGap(198, Short.MAX_VALUE))
+                .addGroup(containerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(containerLayout.createSequentialGroup()
+                        .addGap(384, 384, 384)
+                        .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(containerLayout.createSequentialGroup()
+                        .addGap(400, 400, 400)
+                        .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         containerLayout.setVerticalGroup(
             containerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(containerLayout.createSequentialGroup()
-                .addGap(270, 270, 270)
-                .addComponent(jLabel1)
-                .addContainerGap(282, Short.MAX_VALUE))
+                .addGap(98, 98, 98)
+                .addComponent(lblWelcome, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(40, 40, 40)
+                .addGroup(containerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblUsername)
+                    .addComponent(lblPassword))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(containerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(66, 66, 66)
+                .addComponent(btnLogin)
+                .addGap(18, 18, 18)
+                .addComponent(btnLogout)
+                .addContainerGap(225, Short.MAX_VALUE))
         );
 
         menuAplikasi.setText("Aplikasi");
@@ -175,6 +254,71 @@ public class frameUtama extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_submenuTambahDataActionPerformed
 
+    private void txtUsernameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsernameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtUsernameActionPerformed
+
+    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
+        String username = txtUsername.getText().trim();
+        String password = new String(txtPassword.getPassword());
+
+        if (username.equals("admin") && password.equals("adminadmin")) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Login Berhasil! Selamat Datang.");
+
+            menuData.setEnabled(true);
+            submenuDataTenant.setEnabled(true);
+            submenuTambahData.setEnabled(true);
+
+            txtUsername.setText("");
+            txtPassword.setText("");
+            lblWelcome.setText("Selamat Datang " + username + ", Manage Tenant anda disini");
+            
+            lblUsername.setVisible(false);
+            lblPassword.setVisible(false);
+            
+            txtUsername.setVisible(false);
+            txtPassword.setVisible(false);
+            txtUsername.setEnabled(false);
+            txtPassword.setEnabled(false);
+            btnLogin.setEnabled(false);
+            btnLogin.setVisible(false);
+            btnLogout.setEnabled(true);
+            btnLogout.setVisible(true);
+
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, 
+                "Username atau Password Salah!", 
+                "Login Gagal", 
+                javax.swing.JOptionPane.ERROR_MESSAGE);
+
+            txtUsername.setText("");
+            txtPassword.setText("");
+            txtUsername.requestFocus(); // Taruh kursor kembali ke kolom username
+        }
+    }//GEN-LAST:event_btnLoginActionPerformed
+
+    private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
+        menuData.setEnabled(false);
+        submenuDataTenant.setEnabled(false);
+        submenuTambahData.setEnabled(false);
+
+        lblWelcome.setText("Selamat Datang, Silahkan Login Terlebih Dahulu");
+        lblUsername.setVisible(true);
+        lblPassword.setVisible(true);
+        
+        txtUsername.setEnabled(true);
+        txtPassword.setEnabled(true);
+        txtUsername.setVisible(true);
+        txtPassword.setVisible(true);
+        btnLogin.setEnabled(true);
+        btnLogin.setVisible(true);
+        btnLogout.setEnabled(false);
+        btnLogout.setVisible(false);
+        txtUsername.requestFocus();
+
+        javax.swing.JOptionPane.showMessageDialog(this, "Anda telah logout.");
+    }//GEN-LAST:event_btnLogoutActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -212,14 +356,20 @@ public class frameUtama extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnLogin;
+    private javax.swing.JButton btnLogout;
     private javax.swing.JDesktopPane container;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JLabel lblPassword;
+    private javax.swing.JLabel lblUsername;
+    private javax.swing.JLabel lblWelcome;
     private javax.swing.JMenu menuAplikasi;
     private javax.swing.JMenu menuData;
     private javax.swing.JMenuItem submenuClose;
     private javax.swing.JMenuItem submenuCloseApp;
     private javax.swing.JMenuItem submenuDataTenant;
     private javax.swing.JMenuItem submenuTambahData;
+    private javax.swing.JPasswordField txtPassword;
+    private javax.swing.JTextField txtUsername;
     // End of variables declaration//GEN-END:variables
 }
